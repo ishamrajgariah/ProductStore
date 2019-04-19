@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ProductQueryApi.Cache;
+using ProductQueryApi.Cache.RedisProductCache;
 using ProductQueryApi.Events;
 using ProductQueryApi.Models;
 using ProductQueryApi.Queues;
@@ -48,6 +50,10 @@ namespace ProductQueryApi
             services.AddTransient(typeof(EventingBasicConsumer), typeof(AMQPEventingConsumer));
             services.AddSingleton(typeof(IEventSubscriber), typeof(AMQPEventSubscriber));
             services.AddSingleton(typeof(IEventProcessor), typeof(NewProductEventProcessor));
+            //services.AddRedisConnectionMultiplexer(Configuration);
+            services.AddMemoryCache();
+            services.AddSingleton<IProductCache, MemoryProductCache>();
+
         }
 
         // Singletons are lazy instantiation.. so if we don't ask for an instance during startup,

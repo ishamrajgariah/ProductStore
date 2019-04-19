@@ -3,6 +3,7 @@ using ProductQueryApi.Models;
 using ProductQueryApi.Repository;
 using System;
 using System.Collections.Generic;
+using ProductQueryApi.Cache;
 
 namespace ProductQueryApi.Controllers
 {
@@ -11,16 +12,21 @@ namespace ProductQueryApi.Controllers
     {
         private IProductRepository productRepository;
 
+        private IProductCache productCache;
+
         public ProductController( 
-            IProductRepository productRepository)
+            IProductRepository productRepository, IProductCache productCache)
         {
             this.productRepository = productRepository;
+            this.productCache = productCache;
         }
 
         [HttpGet]
         public ICollection<Product> All()
         {
-            return this.productRepository.GetAll();
+            return this.productCache.GetProducts();
         }
+
+
     }
 }
